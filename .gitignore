@@ -7,4 +7,4 @@ share/
 static/
 pip-selfcheck.json
 pyvenv.cfg
-
+app/settings.py
