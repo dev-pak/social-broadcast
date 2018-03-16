@@ -4,7 +4,7 @@ from storage import storage
 from simple_settings import settings
 
 
-def send(message, parsed=None, members=storage.all()):
+def main(message, parsed=None, members=storage.all()):
 
     if parsed:
         parsed = parsed.split('w=')[1]

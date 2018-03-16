@@ -15,9 +15,11 @@ class InvalidUsage(Exception):
 class GetError(Exception):
     text = 'Ошибка входных данных'
 
+
 @app.route("/")
 def index():
-	return 'Flask is running'
+    return 'Flask is running'
+
 
 @app.route("/send", methods=['POST'])
 def send():
@@ -26,8 +28,13 @@ def send():
 
     message = request.form.get('message')
     parsed = request.form.get('parsed')
-    discord_bot.main(message)
-    #vk_bot.send(message, parsed)
+
+    if  settings.discord:
+        discord_bot.main(message)
+    if settings.telegram:
+        tele_bot.main(message)
+    if settings.vk:
+        vk_bot.main(message, parsed)
     return 'ok'
 
 
@@ -56,4 +63,3 @@ def get():
 
 if __name__ == '__main__':
     app.run()
-
