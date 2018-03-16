@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 from json import loads
-from simple_settigns import settings
+from simple_settings import settings
 import vk_bot
 import discord_bot
 
