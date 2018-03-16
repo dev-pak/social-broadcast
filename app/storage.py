@@ -1,5 +1,5 @@
 import redis
-from simple_settings.py import settings
+from simple_settings import settings
 
 class Storage:
     HOST = 'localhost'
