@@ -4,6 +4,7 @@ from json import loads
 from simple_settings import settings
 import vk_bot
 import discord_bot
+import tele_bot
 
 app = Flask(__name__)
 
@@ -57,9 +58,9 @@ def get():
                '/unsub для отписки\n' \
                'На этом мои полномочия все'
     if text:
-        vk_bot.send(message=text, members=members)
+        vk_bot.main(message=text, members=members)
     return 'ok'
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='127.0.0.1', port=8888)
