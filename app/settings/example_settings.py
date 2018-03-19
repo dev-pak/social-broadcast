@@ -1,13 +1,24 @@
-#vk_token
-
+# vk tokens
 vk_token = 'XXXXX'
 confirmation_token = 'XXXXX'
 
-#discord tokens
+# discord tokens
 
 discord_token = 'XXXXX'
-channel_id = 'XXXXX'
+discord_channel = 'XXXXX'
 
-#redis
+# telegram tokens
+
+tele_token = 'XXXXX'
+tele_channel = 'XXXXX'
+
+# redis
 
 db = 1
+
+# permissions
+
+discord = True
+vk = True
+telegram = True
+

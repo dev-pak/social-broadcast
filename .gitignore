@@ -10,4 +10,4 @@ pyvenv.cfg
 app/settings.py
 .idea/
 __pycache__/
-
+settings.py
