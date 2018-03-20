@@ -41,7 +41,8 @@ def send():
 
 @app.route("/get", methods=['POST'])
 def get():
-    message = loads(request.data)
+    message = request.data.decode('utf-8')
+    message = loads(message)
 
     if message['type'] == 'confirmation':
         return settings.confirmation_token

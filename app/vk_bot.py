@@ -11,7 +11,6 @@ def main(message, parsed=None, members=storage.all()):
 
     session = vk.Session(settings.vk_token)
     api = vk.API(session)
-    print(members)
     count = len(members)
     for offset in range(ceil(count / 100)):
         api.messages.send(user_ids=members[offset * 100:(offset + 1) * 100], message=message, attachment=parsed, version=5.73)

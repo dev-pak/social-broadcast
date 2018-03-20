@@ -3,11 +3,13 @@ include/
 lib/
 lib64
 logs
+test_logs
 share/
 static/
 pip-selfcheck.json
 pyvenv.cfg
-app/settings.py
 .idea/
 __pycache__/
 settings.py
+test_settings.py
+
