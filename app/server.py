@@ -28,14 +28,14 @@ def send():
         raise InvalidUsage
 
     message = request.form.get('message')
-    parsed = request.form.get('parsed')
+    link = request.form.get('link')
 
     if  settings.discord:
-        discord_bot.main(message)
+        discord_bot.main(message, link)
     if settings.telegram:
-        tele_bot.main(message)
+        tele_bot.main(message, link)
     if settings.vk:
-        vk_bot.main(message, parsed)
+        vk_bot.main(message, link)
     return 'ok'
 
 

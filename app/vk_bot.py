@@ -4,16 +4,16 @@ from storage import storage
 from simple_settings import settings
 
 
-def main(message, parsed=None, members=storage.all()):
+def main(message, link=None, members=storage.all()):
 
-    if parsed:
-        parsed = parsed.split('w=')[1]
+    if link:
+        link = link.split('w=')[1]
 
     session = vk.Session(settings.vk_token)
     api = vk.API(session)
     count = len(members)
     for offset in range(ceil(count / 100)):
-        api.messages.send(user_ids=members[offset * 100:(offset + 1) * 100], message=message, attachment=parsed, version=5.73)
+        api.messages.send(user_ids=members[offset * 100:(offset + 1) * 100], message=message, attachment=link, version=5.73)
 
 
 def subscribe(user_id):
