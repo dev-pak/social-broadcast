@@ -14,6 +14,6 @@ async def send_news(message, channel):
     await client.logout()
 
 
-def main(message, channel=settings.discord_channel):
+def main(message, link=None, channel=settings.discord_channel):
     loop = asyncio.get_event_loop()
     loop.run_until_complete(send_news(message, channel))
