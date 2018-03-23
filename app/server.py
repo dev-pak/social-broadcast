@@ -24,18 +24,20 @@ def index():
 
 @app.route("/send", methods=['POST'])
 def send():
-    if 'message' not in request.form:
-        raise InvalidUsage
 
-    message = request.form.get('message')
-    link = request.form.get('link')
+    ending = '\nДля отписки от рассылки напиши /unsub'
+    message = request.data.decode('utf-8')
+    message = loads(message)
 
-    if  settings.discord:
-        discord_bot.main(message, link)
-    if settings.telegram:
-        tele_bot.main(message, link)
-    if settings.vk:
-        vk_bot.main(message, link)
+    text = message['message'] + ending
+    link = message['link']
+
+    if 'discord' in message['dispatchers']:
+        discord_bot.main(text, link)
+    if 'telegram' in message['dispatchers']:
+        tele_bot.main(text, link)
+    if 'vk' in message['dispatchers']:
+        vk_bot.main(text, link)
     return 'ok'
 
 

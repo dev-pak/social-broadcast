@@ -4,6 +4,7 @@ lib/
 lib64
 logs
 test_logs
+vk_logs
 share/
 static/
 pip-selfcheck.json

@@ -16,9 +16,3 @@ tele_channel = 'XXXXX'
 
 db = 1
 
-# permissions
-
-discord = True
-vk = True
-telegram = True
-
