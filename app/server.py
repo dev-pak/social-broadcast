@@ -2,6 +2,9 @@ from flask import Flask
 from flask import request
 from json import loads
 from simple_settings import settings
+from storage import storage as db
+from contextlib import redirect_stdout
+import hashlib
 import vk_bot
 import discord_bot
 import tele_bot
@@ -9,9 +12,11 @@ import tele_bot
 app = Flask(__name__)
 
 
-class InvalidUsage(Exception):
+class BadRequest(Exception):
     status_code = 400
 
+class Forbidden(Exception):
+    status_code = 403
 
 class GetError(Exception):
     text = 'Ошибка входных данных'
@@ -26,10 +31,16 @@ def index():
 def send():
 
     ending = '\nДля отписки от рассылки напиши /unsub'
-    message = request.data.decode('utf-8')
-    message = loads(message)
+    message = request.get_json()
 
-    text = message['message'] + ending
+    with open('vk_logs', 'w') as f:
+        with redirect_stdout(f):
+            print(request.remote_addr)
+
+    if not db.check(request.remote_addr):
+        raise Forbidden
+
+    text = message['message']
     link = message['link']
 
     if 'discord' in message['dispatchers']:
@@ -37,14 +48,13 @@ def send():
     if 'telegram' in message['dispatchers']:
         tele_bot.main(text, link)
     if 'vk' in message['dispatchers']:
-        vk_bot.main(text, link)
+        vk_bot.main(text+ending, link)
     return 'ok'
 
 
 @app.route("/get", methods=['POST'])
 def get():
-    message = request.data.decode('utf-8')
-    message = loads(message)
+    message = request.get_json()
 
     if message['type'] == 'confirmation':
         return settings.confirmation_token

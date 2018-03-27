@@ -1,5 +1,5 @@
 import vk
-from contextlib import redirect_stdout
+#from contextlib import redirect_stdout
 from math import ceil
 from storage import storage
 from simple_settings import settings
@@ -13,12 +13,12 @@ def main(message, link=None, members=storage.all()):
     session = vk.Session(settings.vk_token)
     api = vk.API(session)
     count = len(members)
-    with open('vk_logs', 'w') as f:
-        with redirect_stdout(f):
-            for offset in range(ceil(count / 100)):
-                response = api.messages.send(user_ids=members[offset * 100:(offset + 1) * 100], message=message, attachment=link, version=5.73)
-                #response = api.messages.get(version=5.73)
-                print(str(response))
+    #with open('vk_logs', 'w') as f:
+    # with redirect_stdout(f):
+    for offset in range(ceil(count / 100)):
+        response = api.messages.send(user_ids=members[offset * 100:(offset + 1) * 100], message=message, attachment=link, version=5.73)
+        #response = api.messages.get(version=5.73)
+        #print(str(response))
 
 
 def subscribe(user_id):
