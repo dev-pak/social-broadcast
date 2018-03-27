@@ -33,12 +33,8 @@ def send():
     ending = '\nДля отписки от рассылки напиши /unsub'
     message = request.get_json()
 
-    with open('vk_logs', 'w') as f:
-        with redirect_stdout(f):
-            print(request.remote_addr)
-
-    if not db.check(request.remote_addr):
-        raise Forbidden
+    db.check(request.remote_addr)
+    #raise Forbidden
 
     text = message['message']
     link = message['link']

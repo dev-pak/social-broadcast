@@ -15,4 +15,3 @@ tele_channel = 'XXXXX'
 # redis
 
 db = 1
-

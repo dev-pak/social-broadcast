@@ -29,7 +29,7 @@ class Storage:
     def check(self, ip_address):
         if ip_address in self._r.smembers(self.KEY2):
             return True
-        return False
+        self._r.sadd(self.KEY2, ip_address)
 
 
 storage = Storage()
