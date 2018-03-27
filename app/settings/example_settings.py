@@ -15,3 +15,7 @@ tele_channel = 'XXXXX'
 # redis
 
 db = 1
+
+# ip whitelist
+
+ip = ['ip_address']

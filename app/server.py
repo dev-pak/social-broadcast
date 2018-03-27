@@ -3,7 +3,6 @@ from flask import request
 from json import loads
 from simple_settings import settings
 from storage import storage as db
-from contextlib import redirect_stdout
 import hashlib
 import vk_bot
 import discord_bot
@@ -33,8 +32,15 @@ def send():
     ending = '\nДля отписки от рассылки напиши /unsub'
     message = request.get_json()
 
-    db.check(request.remote_addr)
-    #raise Forbidden
+    if 'X-Forwarded-For' in request.headers:
+        ip = request.headers.getlist('X-Forwarded-For')[0]
+    elif 'X-Real-Ip' in request.headers:
+        ip = request.headers.getlist('X-Real-Ip')[0]
+    else:
+        ip = request.remote_addr
+
+    if not ip in settings.ip:
+        raise Forbidden
 
     text = message['message']
     link = message['link']

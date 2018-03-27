@@ -26,10 +26,5 @@ class Storage:
     def all(self):
         return list([int(i) for i in self._r.smembers(self.KEY1)])
 
-    def check(self, ip_address):
-        if ip_address in self._r.smembers(self.KEY2):
-            return True
-        self._r.sadd(self.KEY2, ip_address)
-
-
 storage = Storage()
+
