@@ -1,9 +1,6 @@
 from flask import Flask
 from flask import request
-from json import loads
 from simple_settings import settings
-from storage import storage as db
-import hashlib
 import vk_bot
 import discord_bot
 import tele_bot
