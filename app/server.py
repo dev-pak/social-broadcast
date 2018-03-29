@@ -51,13 +51,6 @@ def send():
     except KeyError:
         pass
 
-    if message['dispatchers'] == '':
-        dispatchers.discord_bot.main(text, link)
-        dispatchers.tele_bot.main(text, link)
-        dispatchers.vk_bot.main(text + ending, link)
-        return 'ok'
-
-
     if 'discord' in message['dispatchers']:
         dispatchers.discord_bot.main(text, link)
     if 'telegram' in message['dispatchers']:
