@@ -52,18 +52,18 @@ def send():
         pass
 
     if message['dispatchers'] == '':
-        discord_bot.main(text, link)
-        tele_bot.main(text, link)
-        vk_bot.main(text + ending, link)
+        dispatchers.discord_bot.main(text, link)
+        dispatchers.tele_bot.main(text, link)
+        dispatchers.vk_bot.main(text + ending, link)
         return 'ok'
 
 
     if 'discord' in message['dispatchers']:
-        discord_bot.main(text, link)
+        dispatchers.discord_bot.main(text, link)
     if 'telegram' in message['dispatchers']:
-        tele_bot.main(text, link)
+        dispatchers.tele_bot.main(text, link)
     if 'vk' in message['dispatchers']:
-        vk_bot.main(text+ending, link)
+        dispatchers.vk_bot.main(text+ending, link)
     return 'ok'
 
 
