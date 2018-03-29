@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from simple_settings import settings
+from cypher import encrypt
 import vk_bot
 import discord_bot
 import tele_bot
@@ -27,7 +28,6 @@ def index():
 def send():
 
     ending = '\nДля отписки от рассылки напиши /unsub'
-    message = request.get_json()
 
     if 'X-Forwarded-For' in request.headers:
         ip = request.headers.getlist('X-Forwarded-For')[0]
@@ -39,8 +39,23 @@ def send():
     if not ip in settings.ip:
         raise Forbidden
 
+    message = request.get_json()
+
+    if message['sign'] != encrypt(message):
+        raise Forbidden
+
     text = message['message']
-    link = message['link']
+    try:
+        link = message['link']
+    except KeyError:
+        pass
+
+    if message['dispatchers'] == {}:
+        discord_bot.main(text, link)
+        tele_bot.main(text, link)
+        vk_bot.main(text + ending, link)
+        return 'ok'
+
 
     if 'discord' in message['dispatchers']:
         discord_bot.main(text, link)
@@ -75,4 +90,4 @@ def get():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8888)
+    app.run(host='0.0.0.0', port=8888)
