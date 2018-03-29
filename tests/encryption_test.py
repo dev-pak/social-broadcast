@@ -1,7 +1,6 @@
 import unittest
 from json import dumps
-from app.cypher import order
-from app.cypher import encrypt
+from app.cypher import encrypt, order
 
 
 class CypherTest(unittest.TestCase):

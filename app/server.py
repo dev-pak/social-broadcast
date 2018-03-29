@@ -2,9 +2,9 @@ from flask import Flask
 from flask import request
 from simple_settings import settings
 from cypher import encrypt
-import vk_bot
-import discord_bot
-import tele_bot
+import dispatchers.vk_bot
+import dispatchers.discord_bot
+import dispatchers.tele_bot
 
 app = Flask(__name__)
 
@@ -50,7 +50,7 @@ def send():
     except KeyError:
         pass
 
-    if message['dispatchers'] == {}:
+    if message['dispatchers'] == '':
         discord_bot.main(text, link)
         tele_bot.main(text, link)
         vk_bot.main(text + ending, link)
