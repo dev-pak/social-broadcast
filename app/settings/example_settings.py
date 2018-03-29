@@ -19,3 +19,7 @@ db = 1
 # ip whitelist
 
 ip = ['ip_address']
+
+# encryption
+
+private = 'XXXXX'
