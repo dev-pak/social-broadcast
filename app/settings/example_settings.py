@@ -22,4 +22,5 @@ ip = ['ip_address']
 
 # encryption
 
+encryption = True
 private = 'XXXXX'

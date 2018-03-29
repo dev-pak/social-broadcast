@@ -41,8 +41,9 @@ def send():
 
     message = request.get_json()
 
-    if message['sign'] != encrypt(message):
-        raise Forbidden
+    if settings.encryption:
+        if message['sign'] != encrypt(message):
+            raise Forbidden
 
     text = message['message']
     try:
