@@ -71,15 +71,15 @@ def get():
     members = [message['user_id']]
     text = None
     if message['body'] == '/sub':
-        text = vk_bot.subscribe(message['user_id'])
+        text = dispatchers.vk_bot.subscribe(message['user_id'])
     elif message['body'] == '/unsub':
-        text = vk_bot.unsubscribe(message['user_id'])
+        text = dispatchers.vk_bot.unsubscribe(message['user_id'])
     elif message['body'] == '/help':
         text = '/sub для подписки\n' \
                '/unsub для отписки\n' \
                'На этом мои полномочия все'
     if text:
-        vk_bot.main(message=text, members=members)
+        dispatchers.vk_bot.main(message=text, members=members)
     return 'ok'
 
 
