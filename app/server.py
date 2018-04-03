@@ -1,12 +1,24 @@
 from flask import Flask
 from flask import request
+from flask import jsonify
+from flask_marshmallow import Marshmallow
 from simple_settings import settings
 from cypher import encrypt
 import dispatchers.vk_bot
 import dispatchers.discord_bot
 import dispatchers.tele_bot
 
+
 app = Flask(__name__)
+ma = Marshmallow(app)
+
+
+class RequestSchema(ma.Schema):
+    message = ma.fields.Str(required=True)
+    link = ma.fields.Url()
+    dispatchers = ma.fields.List(ma.fields.Str)
+    if settings.encryption:
+        sign = ma.fields.Str(required=True)
 
 
 class BadRequest(Exception):
@@ -57,7 +69,7 @@ def send():
         dispatchers.tele_bot.main(text, link)
     if 'vk' in message['dispatchers']:
         dispatchers.vk_bot.main(text+ending, link)
-    return 'ok'
+    return jsonify(response)
 
 
 @app.route("/get", methods=['POST'])
