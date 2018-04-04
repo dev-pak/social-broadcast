@@ -11,7 +11,10 @@ class BroadcastVKError(Exception):
 def main(message, link=None, members=storage.all()):
 
     if link:
-        link = link.split('w=')[1]
+        try:
+            link = link.split('w=')[1]
+        except IndexError:
+            return 'Wrong link'
 
     session = vk.Session(settings.vk_token)
     api = vk.API(session)
