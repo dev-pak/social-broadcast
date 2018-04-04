@@ -7,3 +7,4 @@ def main(message, link=None, channel=settings.tele_channel):
     if link:
         message+='\n'+link
     bot.send_message(channel, message)
+    return 'ok'

@@ -17,3 +17,4 @@ async def send_news(message, channel):
 def main(message, link=None, channel=settings.discord_channel):
     loop = asyncio.get_event_loop()
     loop.run_until_complete(send_news(message, channel))
+    return 'ok'

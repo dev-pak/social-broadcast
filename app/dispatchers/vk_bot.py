@@ -3,8 +3,10 @@ from math import ceil
 from storage import storage
 from simple_settings import settings
 
+
 class BroadcastVKError(Exception):
     pass
+
 
 def main(message, link=None, members=storage.all()):
 
@@ -19,6 +21,8 @@ def main(message, link=None, members=storage.all()):
         for element in response:
             if element < 1000:
                 raise BroadcastVKError(response)
+    return 'ok'
+
 
 def subscribe(user_id):
     if storage.set(user_id):
@@ -32,4 +36,3 @@ def unsubscribe(user_id):
         return 'Ты отписался от рассылки, для подписки напиши /sub'
     else:
         return 'Неплохая попытка, но нельзя отписаться, не подписавшись'
-

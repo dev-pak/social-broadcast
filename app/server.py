@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
-from flask_marshmallow import Marshmallow
+from flask_marshmallow import Marshmallow, fields
 from simple_settings import settings
 from cypher import encrypt
 import dispatchers.vk_bot
@@ -10,15 +10,15 @@ import dispatchers.tele_bot
 
 
 app = Flask(__name__)
-ma = Marshmallow(app)
+#ma = Marshmallow(app)
 
 
-class RequestSchema(ma.Schema):
-    message = ma.fields.Str(required=True)
-    link = ma.fields.Url()
-    dispatchers = ma.fields.List(ma.fields.Str)
-    if settings.encryption:
-        sign = ma.fields.Str(required=True)
+#class RequestSchema(ma.Schema):
+#   message = fields.Str(required=True)
+#    link = fields.UrlFor()
+#    dispatchers = fields.List(fields.Str)
+#    if settings.encryption:
+#        sign = fields.Str(required=True)
 
 
 class BadRequest(Exception):
@@ -41,6 +41,12 @@ def send():
 
     ending = '\nДля отписки от рассылки напиши /unsub'
 
+    message = request.get_json()
+    #validation = RequestSchema.validate(message)
+
+    #if validation is not {}:
+    #    return jsonify(validation)
+
     if 'X-Forwarded-For' in request.headers:
         ip = request.headers.getlist('X-Forwarded-For')[0]
     elif 'X-Real-Ip' in request.headers:
@@ -49,26 +55,26 @@ def send():
         ip = request.remote_addr
 
     if not ip in settings.ip:
-        raise Forbidden
-
-    message = request.get_json()
+        return 'Forbidden'
 
     if settings.encryption:
         if message['sign'] != encrypt(message):
-            raise Forbidden
+            return 'Forbidden'
 
     text = message['message']
     try:
         link = message['link']
     except KeyError:
-        pass
+        link = None
+
+    response = {}
 
     if 'discord' in message['dispatchers']:
-        dispatchers.discord_bot.main(text, link)
+        response.update({"discord": dispatchers.discord_bot.main(text, link)})
     if 'telegram' in message['dispatchers']:
-        dispatchers.tele_bot.main(text, link)
+        response.update({"telegram": dispatchers.tele_bot.main(text, link)})
     if 'vk' in message['dispatchers']:
-        dispatchers.vk_bot.main(text+ending, link)
+        response.update({"vk": dispatchers.vk_bot.main(text+ending, link)})
     return jsonify(response)
 
 
