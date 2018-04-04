@@ -55,11 +55,11 @@ def send():
         ip = request.remote_addr
 
     if not ip in settings.ip:
-        return 'Forbidden'
+        return jsonify('Forbidden')
 
     if settings.encryption:
         if message['sign'] != encrypt(message):
-            return 'Forbidden'
+            return jsonify('Forbidden')
 
     text = message['message']
     try:
