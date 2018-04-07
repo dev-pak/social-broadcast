@@ -63,7 +63,9 @@ def send():
     message = request.get_json()
     validation = RequestSchema().validate(message)
 
-    if validation is not {}:
+    print(validation)
+
+    if validation != {}:
         return jsonify(validation)
 
     if 'X-Forwarded-For' in request.headers:
@@ -100,13 +102,13 @@ def send():
 @app.route("/get", methods=['POST'])
 def get():
 
-    if not settings.vk_bot:
-        return jsonify('ok')
-
     message = request.get_json()
 
     if message['type'] == 'confirmation':
         return settings.confirmation_token
+
+    if not settings.vk_bot:
+        return jsonify('ok')
 
     message = message['object']
     members = [message['user_id']]
