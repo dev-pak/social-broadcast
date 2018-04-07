@@ -17,7 +17,10 @@ def main(message, link=None, members=storage.all()):
     api = vk.API(session)
     count = len(members)
     for offset in range(ceil(count / 100)):
-        response = api.messages.send(user_ids=members[offset * 100:(offset + 1) * 100], message=message, attachment=link, version=5.73)
+        response = api.messages.send(user_ids=members[offset * 100:(offset + 1) * 100],
+                                     message=message,
+                                     attachment=link,
+                                     version=5.73)
         for element in response:
             if element < 1000:
                 raise BroadcastVKError(response)
