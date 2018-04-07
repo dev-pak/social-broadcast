@@ -99,6 +99,10 @@ def send():
 
 @app.route("/get", methods=['POST'])
 def get():
+
+    if not settings.vk_bot:
+        return jsonify('ok')
+
     message = request.get_json()
 
     if message['type'] == 'confirmation':
@@ -117,7 +121,7 @@ def get():
                'На этом мои полномочия все'
     if text:
         dispatchers.vk_bot.main(message=text, members=members)
-    return 'ok'
+    return jsonify('ok')
 
 
 if __name__ == '__main__':
