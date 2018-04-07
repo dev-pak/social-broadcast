@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
-from flask_marshmallow import Marshmallow, fields
+from marshmallow import Schema, fields, validates, ValidationError
 from simple_settings import settings
 from cypher import encrypt
 import dispatchers.vk_bot
@@ -10,22 +10,41 @@ import dispatchers.tele_bot
 
 
 app = Flask(__name__)
-#ma = Marshmallow(app)
 
 
-#class RequestSchema(ma.Schema):
-#   message = fields.Str(required=True)
-#    link = fields.UrlFor()
-#    dispatchers = fields.List(fields.Str)
-#    if settings.encryption:
-#        sign = fields.Str(required=True)
+class RequestSchema(Schema):
+    message = fields.String(required=True)
+
+    @validates('message')
+    def validate_message(self, value):
+        if len(value) > 1000:
+            raise ValidationError('Too long text message')
+
+    link = fields.URL()
+
+    @validates('link')
+    def validate_link(self, value):
+        if 'https://vk.com/skinsdeathmatch?w=wall-151563291_' not in value:
+            raise ValidationError('Invalid link')
+
+    dispatchers = fields.List(fields.String())
+
+    @validates('dispatchers')
+    def validate_dispatchers(self, value):
+        if value != [] and list(set(value) & {'vk', 'telegram', 'discord'}) == []:
+            raise ValidationError('Unexpected dispatchers')
+
+    if settings.encryption:
+        sign = fields.String(required=True)
 
 
 class BadRequest(Exception):
     status_code = 400
 
+
 class Forbidden(Exception):
     status_code = 403
+
 
 class GetError(Exception):
     text = 'Ошибка входных данных'
@@ -42,10 +61,10 @@ def send():
     ending = '\nДля отписки от рассылки напиши /unsub'
 
     message = request.get_json()
-    #validation = RequestSchema.validate(message)
+    validation = RequestSchema().validate(message)
 
-    #if validation is not {}:
-    #    return jsonify(validation)
+    if validation is not {}:
+        return jsonify(validation)
 
     if 'X-Forwarded-For' in request.headers:
         ip = request.headers.getlist('X-Forwarded-For')[0]
@@ -54,7 +73,7 @@ def send():
     else:
         ip = request.remote_addr
 
-    if not ip in settings.ip:
+    if ip not in settings.ip:
         return jsonify('Forbidden')
 
     if settings.encryption:
