@@ -1,6 +1,7 @@
 # vk tokens
 vk_token = 'XXXXX'
 confirmation_token = 'XXXXX'
+vk_bot = True
 
 # discord tokens
 
@@ -24,3 +25,7 @@ ip = ['ip_address']
 
 encryption = True
 private = 'XXXXX'
+
+# URL
+
+url = 'https://example_url.com'

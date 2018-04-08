@@ -24,7 +24,7 @@ class RequestSchema(Schema):
 
     @validates('link')
     def validate_link(self, value):
-        if 'https://vk.com/skinsdeathmatch?w=wall-151563291_' not in value:
+        if settings.url not in value:
             raise ValidationError('Invalid link')
 
     dispatchers = fields.List(fields.String())
