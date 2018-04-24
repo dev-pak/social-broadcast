@@ -3,8 +3,7 @@ include/
 lib/
 lib64
 logs
-test_logs
-vk_logs
+validation.log
 share/
 static/
 pip-selfcheck.json

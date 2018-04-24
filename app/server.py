@@ -7,10 +7,21 @@ from cypher import encrypt
 import dispatchers.vk_bot
 import dispatchers.discord_bot
 import dispatchers.tele_bot
-
+import logging
+from datetime import date
+import os
 
 app = Flask(__name__)
+logger = logging.getLogger('validation')
+logger.setLevel(logging.DEBUG)
 
+filename = 'validation'
+filepath = os.path.join(settings.logs_dir, filename)
+fh = logging.handlers.TimedRotatingFileHandler('{}.log'.format(filepath), 'D')
+fh.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
 
 class RequestSchema(Schema):
     message = fields.String(required=True)
@@ -63,7 +74,8 @@ def send():
     message = request.get_json()
     validation = RequestSchema().validate(message)
 
-    print(validation)
+    logger.info(message)
+    logger.info(validation)
 
     if validation != {}:
         return jsonify(validation)
