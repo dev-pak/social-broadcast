@@ -1,9 +1,9 @@
-import unittest
+from unittest import TestCase, main
 from json import dumps
 from app.cypher import encrypt, order
 
 
-class CypherTest(unittest.TestCase):
+class CypherTest(TestCase):
 
     body1 = {'key1': 'value1', 'key3': 'value3', 'key2': {'key2': 'value2', 'key1': 'value1'}}
     body2 = {"message": "baca", "link": "", "dispatchers": ["vk", "discord", "telegram"]}
@@ -20,4 +20,4 @@ class CypherTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    main()

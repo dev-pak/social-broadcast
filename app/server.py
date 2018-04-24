@@ -4,9 +4,7 @@ from flask import jsonify
 from marshmallow import Schema, fields, validates, ValidationError
 from simple_settings import settings
 from cypher import encrypt
-import dispatchers.vk_bot
-import dispatchers.discord_bot
-import dispatchers.tele_bot
+from dispatchers import vk_bot, discord_bot, tele_bot
 
 
 app = Flask(__name__)
@@ -31,7 +29,9 @@ class RequestSchema(Schema):
 
     @validates('dispatchers')
     def validate_dispatchers(self, value):
-        if value != [] and list(set(value) & {'vk', 'telegram', 'discord'}) == []:
+        if value != [] and list(set(value) & {'vk',
+                                              'telegram',
+                                              'discord'}) == []:
             raise ValidationError('Unexpected dispatchers')
 
     if settings.encryption:
@@ -91,11 +91,11 @@ def send():
     response = {}
 
     if 'discord' in message['dispatchers']:
-        response.update({"discord": dispatchers.discord_bot.main(text, link)})
+        response.update({"discord": discord_bot.main(text, link)})
     if 'telegram' in message['dispatchers']:
-        response.update({"telegram": dispatchers.tele_bot.main(text, link)})
+        response.update({"telegram": tele_bot.main(text, link)})
     if 'vk' in message['dispatchers']:
-        response.update({"vk": dispatchers.vk_bot.main(text+ending, link)})
+        response.update({"vk": vk_bot.main(text+ending, link)})
     return jsonify(response)
 
 
@@ -114,15 +114,15 @@ def get():
     members = [message['user_id']]
     text = None
     if message['body'] == '/sub':
-        text = dispatchers.vk_bot.subscribe(message['user_id'])
+        text = vk_bot.subscribe(message['user_id'])
     elif message['body'] == '/unsub':
-        text = dispatchers.vk_bot.unsubscribe(message['user_id'])
+        text = vk_bot.unsubscribe(message['user_id'])
     elif message['body'] == '/help':
         text = '/sub для подписки\n' \
                '/unsub для отписки\n' \
                'На этом мои полномочия все'
     if text:
-        dispatchers.vk_bot.main(message=text, members=members)
+        vk_bot.main(message=text, members=members)
     return jsonify('ok')
 
 

@@ -26,5 +26,5 @@ class Storage:
     def all(self):
         return list([int(i) for i in self._r.smembers(self.KEY1)])
 
-storage = Storage()
 
+storage = Storage()
