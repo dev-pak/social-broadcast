@@ -4,11 +4,29 @@ from flask import jsonify
 from marshmallow import Schema, fields, validates, ValidationError
 from simple_settings import settings
 from cypher import encrypt
+<<<<<<< HEAD
 from dispatchers import vk_bot, discord_bot, tele_bot
 
+=======
+import dispatchers.vk_bot
+import dispatchers.discord_bot
+import dispatchers.tele_bot
+import logging
+from datetime import date
+import os
+>>>>>>> 79b0014e9a0654252c31a11c94928a9021b2bc0c
 
 app = Flask(__name__)
+logger = logging.getLogger('validation')
+logger.setLevel(logging.DEBUG)
 
+filename = 'validation'
+filepath = os.path.join(settings.logs_dir, filename)
+fh = logging.handlers.TimedRotatingFileHandler('{}.log'.format(filepath), 'D')
+fh.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
 
 class RequestSchema(Schema):
     message = fields.String(required=True)
@@ -63,7 +81,8 @@ def send():
     message = request.get_json()
     validation = RequestSchema().validate(message)
 
-    print(validation)
+    logger.info(message)
+    logger.info(validation)
 
     if validation != {}:
         return jsonify(validation)
@@ -108,7 +127,7 @@ def get():
         return settings.confirmation_token
 
     if not settings.vk_bot:
-        return jsonify('ok')
+        return 'ok'
 
     message = message['object']
     members = [message['user_id']]
@@ -122,8 +141,13 @@ def get():
                '/unsub для отписки\n' \
                'На этом мои полномочия все'
     if text:
+<<<<<<< HEAD
         vk_bot.main(message=text, members=members)
     return jsonify('ok')
+=======
+        dispatchers.vk_bot.main(message=text, members=members)
+    return 'ok'
+>>>>>>> 79b0014e9a0654252c31a11c94928a9021b2bc0c
 
 
 if __name__ == '__main__':
