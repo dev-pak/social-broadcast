@@ -108,7 +108,7 @@ def get():
         return settings.confirmation_token
 
     if not settings.vk_bot:
-        return jsonify('ok')
+        return 'ok'
 
     message = message['object']
     members = [message['user_id']]
@@ -123,7 +123,7 @@ def get():
                'На этом мои полномочия все'
     if text:
         dispatchers.vk_bot.main(message=text, members=members)
-    return jsonify('ok')
+    return 'ok'
 
 
 if __name__ == '__main__':
