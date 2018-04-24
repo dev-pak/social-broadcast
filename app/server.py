@@ -1,20 +1,11 @@
-from flask import Flask
-from flask import request
-from flask import jsonify
 from marshmallow import Schema, fields, validates, ValidationError
+from dispatchers import vk_bot, discord_bot, tele_bot
+from flask import Flask, request, jsonify
 from simple_settings import settings
 from cypher import encrypt
-<<<<<<< HEAD
-from dispatchers import vk_bot, discord_bot, tele_bot
-
-=======
-import dispatchers.vk_bot
-import dispatchers.discord_bot
-import dispatchers.tele_bot
 import logging
-from datetime import date
 import os
->>>>>>> 79b0014e9a0654252c31a11c94928a9021b2bc0c
+
 
 app = Flask(__name__)
 logger = logging.getLogger('validation')
@@ -27,6 +18,7 @@ fh.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
 logger.addHandler(fh)
+
 
 class RequestSchema(Schema):
     message = fields.String(required=True)
@@ -75,7 +67,6 @@ def index():
 
 @app.route("/send", methods=['POST'])
 def send():
-
     ending = '\nДля отписки от рассылки напиши /unsub'
 
     message = request.get_json()
@@ -104,6 +95,7 @@ def send():
     text = message['message']
     try:
         link = message['link']
+
     except KeyError:
         link = None
 
@@ -114,13 +106,12 @@ def send():
     if 'telegram' in message['dispatchers']:
         response.update({"telegram": tele_bot.main(text, link)})
     if 'vk' in message['dispatchers']:
-        response.update({"vk": vk_bot.main(text+ending, link)})
+        response.update({"vk": vk_bot.main(text + ending, link)})
     return jsonify(response)
 
 
 @app.route("/get", methods=['POST'])
 def get():
-
     message = request.get_json()
 
     if message['type'] == 'confirmation':
@@ -134,20 +125,18 @@ def get():
     text = None
     if message['body'] == '/sub':
         text = vk_bot.subscribe(message['user_id'])
+
     elif message['body'] == '/unsub':
         text = vk_bot.unsubscribe(message['user_id'])
+
     elif message['body'] == '/help':
         text = '/sub для подписки\n' \
                '/unsub для отписки\n' \
                'На этом мои полномочия все'
+
     if text:
-<<<<<<< HEAD
         vk_bot.main(message=text, members=members)
-    return jsonify('ok')
-=======
-        dispatchers.vk_bot.main(message=text, members=members)
     return 'ok'
->>>>>>> 79b0014e9a0654252c31a11c94928a9021b2bc0c
 
 
 if __name__ == '__main__':

@@ -10,7 +10,7 @@ async def send_news(message, channel):
     except discord.errors.LoginFailure:
         return None
     channel = discord.Object(channel)
-    await client.send_message(channel, message)
+    client.send_message(channel, message)
     await client.logout()
 
 

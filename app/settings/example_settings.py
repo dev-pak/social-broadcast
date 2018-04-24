@@ -29,3 +29,7 @@ private = 'XXXXX'
 # URL
 
 url = 'https://example_url.com'
+
+# logs
+
+logs_dir = '/home/xxxxx/xxxxx'
