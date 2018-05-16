@@ -2,8 +2,7 @@ bin/
 include/
 lib/
 lib64
-logs
-validation.log
+logs/
 share/
 static/
 pip-selfcheck.json
