@@ -14,7 +14,7 @@ marshmallow==2.15.1
 multidict==4.2.0
 pyTelegramBotAPI==3.6.1
 redis==2.10.6
-requests==2.18.4
+requests==2.20.0
 simple-settings==0.12.1
 six==1.11.0
 urllib3==1.24.2
