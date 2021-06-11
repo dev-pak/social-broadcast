@@ -19,5 +19,5 @@ simple-settings==0.12.1
 six==1.11.0
 urllib3==1.24.2
 vk==2.0.2
-websockets==3.4
+websockets==9.1
 Werkzeug==0.15.3
